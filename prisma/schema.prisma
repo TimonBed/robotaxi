@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  operator    String
+  website     String?
+  colorHex    String   @default("#00E5FF")
+  status      String
+  launchedAt  DateTime?
+  notes       String?
+  geofences   Geofence[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Geofence {
+  id             String   @id @default(cuid())
+  serviceId      String
+  service        Service  @relation(fields: [serviceId], references: [id])
+  name           String
+  level          String
+  statusOverride String?
+  properties     String?
+  geometry       String
+  effectiveFrom  DateTime?
+  effectiveTo    DateTime?
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model MetricSnapshot {
+  id               String   @id @default(cuid())
+  date             DateTime @default(now())
+  worldAreaKm2     Float
+  coveredAreaKm2   Float
+  populationCovered Float?
+  notes            String?
+}
+
+model User {
+  id           String  @id @default(cuid())
+  email        String  @unique
+  passwordHash String
+  role         String   @default("admin")
+  createdAt    DateTime @default(now())
+}
+
