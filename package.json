@@ -5,10 +5,12 @@
   "scripts": {
     "dev": "next dev --turbopack -p 3001",
     "build": "next build",
+    "vercel-build": "prisma migrate deploy || prisma db push && next build",
     "start": "next start -p 3001",
     "lint": "next lint",
     "postinstall": "prisma generate",
     "prisma:generate": "prisma generate",
+    "prisma:deploy": "prisma migrate deploy",
     "prisma:migrate": "prisma migrate dev --name init",
     "seed": "tsx prisma/seed.ts",
     "add:geofences": "tsx scripts/add-geofences.ts",
