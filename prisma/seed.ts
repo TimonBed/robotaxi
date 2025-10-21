@@ -14,46 +14,6 @@ async function main() {
     create: { email: adminEmail, passwordHash: hash, role: 'admin' }
   })
 
-  const existing = await prisma.service.findFirst({ where: { name: 'Sample Robotaxi' } })
-  const service = existing ?? await prisma.service.create({
-    data: {
-      name: 'Sample Robotaxi',
-      operator: 'Sample Operator',
-      website: 'https://example.com',
-      colorHex: '#00E5FF',
-      status: 'pilot'
-    }
-  })
-
-  // Simple square polygon near SF Bay Area as sample
-  const polygon = {
-    type: 'Feature',
-    properties: {},
-    geometry: {
-      type: 'MultiPolygon',
-      coordinates: [
-        [
-          [
-            [-122.6, 37.6],
-            [-122.2, 37.6],
-            [-122.2, 37.9],
-            [-122.6, 37.9],
-            [-122.6, 37.6]
-          ]
-        ]
-      ]
-    }
-  }
-
-  await prisma.geofence.create({
-    data: {
-      serviceId: service.id,
-      name: 'SF Pilot Zone',
-      level: 'city',
-      geometry: JSON.stringify(polygon.geometry),
-      isActive: true
-    }
-  })
 }
 
 main()

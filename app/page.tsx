@@ -86,17 +86,7 @@ export default function HomePage() {
         </p>
       </section>
 
-      {/* Footer mini */}
-      <section className="rounded-xl border border-gray-800 bg-gray-900 p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-gray-400">
-          <div>© {new Date().getFullYear()} RobotaxiMap</div>
-          <div className="flex items-center gap-4">
-            <Link href="/map" className="hover:text-gray-200">Map</Link>
-            <Link href={"/services" as Route} className="hover:text-gray-200">Services</Link>
-            <Link href="/admin" className="hover:text-gray-200">Admin</Link>
-          </div>
-        </div>
-      </section>
+      {/* Global footer is in layout */}
     </main>
   )
 }
