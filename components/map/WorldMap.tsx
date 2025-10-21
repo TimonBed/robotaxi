@@ -43,7 +43,7 @@ export default function WorldMap({ allowedStatuses, allowedServiceIds }: { allow
           },
       center: [0, 20],
       zoom: 1.5,
-      attributionControl: true
+      attributionControl: { compact: true }
     })
     mapRef.current = map
 
