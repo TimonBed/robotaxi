@@ -4,6 +4,9 @@ import GeofenceEditForm from '@/components/admin/GeofenceEditForm'
 import { prisma } from '@/lib/db/prisma'
 import { notFound } from 'next/navigation'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export default async function EditGeofencePage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions as any)
   const role = (session as any)?.user?.role

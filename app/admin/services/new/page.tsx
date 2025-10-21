@@ -2,6 +2,9 @@ import { authOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import ServiceForm from '@/components/admin/ServiceForm'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export default async function NewServicePage() {
   const session = await getServerSession(authOptions as any)
   const role = (session as any)?.user?.role

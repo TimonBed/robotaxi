@@ -4,6 +4,9 @@ import { prisma } from '@/lib/db/prisma'
 import Link from 'next/link'
 import * as turf from '@turf/turf'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export default async function ServicesPage() {
   const session = await getServerSession(authOptions as any)
   const role = (session as any)?.user?.role

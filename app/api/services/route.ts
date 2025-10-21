@@ -3,6 +3,9 @@ import { prisma } from '@/lib/db/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   const services = await prisma.service.findMany({ orderBy: { name: 'asc' } })
   return NextResponse.json(services)
@@ -25,5 +28,6 @@ export async function POST(req: Request) {
   }})
   return NextResponse.json(created)
 }
+
 
 

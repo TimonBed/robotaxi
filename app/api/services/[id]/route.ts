@@ -3,6 +3,9 @@ import { prisma } from '@/lib/db/prisma'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   const s = await prisma.service.findUnique({ where: { id: params.id } })
   if (!s) return new NextResponse('Not found', { status: 404 })
@@ -34,5 +37,6 @@ export async function DELETE(_: Request, { params }: { params: { id: string } })
   await prisma.service.delete({ where: { id: params.id } })
   return NextResponse.json({ ok: true })
 }
+
 
 

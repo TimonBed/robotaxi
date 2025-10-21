@@ -2,6 +2,9 @@ import { authOptions } from '@/lib/auth'
 import { getServerSession } from 'next-auth'
 import Link from 'next/link'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export default async function AdminHome() {
   const session = await getServerSession(authOptions as any)
   const role = (session as any)?.user?.role

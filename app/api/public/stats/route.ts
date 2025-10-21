@@ -2,6 +2,9 @@ import { prisma } from '@/lib/db/prisma'
 import { NextResponse } from 'next/server'
 import * as turf from '@turf/turf'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export async function GET() {
   // Load geofences
   const geos = await prisma.geofence.findMany({ where: { isActive: true }, select: { geometry: true } })

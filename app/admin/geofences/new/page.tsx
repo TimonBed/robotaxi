@@ -3,6 +3,9 @@ import { getServerSession } from 'next-auth'
 import { prisma } from '@/lib/db/prisma'
 import GeofenceEditForm from '@/components/admin/GeofenceEditForm'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export default async function NewGeofencePage() {
   const session = await getServerSession(authOptions as any)
   const role = (session as any)?.user?.role
