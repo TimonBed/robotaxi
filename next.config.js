@@ -2,8 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   eslint: { ignoreDuringBuilds: true },
+  typedRoutes: true,
   experimental: {
-    typedRoutes: true,
     serverActions: {
       allowedOrigins: ["*"]
     }

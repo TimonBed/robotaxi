@@ -6,7 +6,7 @@ import { authOptions } from '@/lib/auth'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions as any)
   const role = (session as any)?.user?.role
   if (!session || role !== 'admin') {
@@ -41,7 +41,8 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
     return new NextResponse('No changes', { status: 400 })
   }
 
-  await prisma.geofence.update({ where: { id: params.id }, data })
+  const { id } = await params
+  await prisma.geofence.update({ where: { id }, data })
   return NextResponse.json({ ok: true })
 }
 

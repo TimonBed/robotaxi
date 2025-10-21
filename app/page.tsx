@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import type { Route } from 'next'
 import { GlobeAltIcon, MapIcon, ShieldCheckIcon } from '@heroicons/react/24/outline'
 
 export default function HomePage() {
@@ -14,7 +15,7 @@ export default function HomePage() {
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/map" className="rounded bg-sky-500 px-5 py-2 text-sm font-medium text-white hover:bg-sky-400">Open Coverage Map</Link>
-            <Link href="/services" className="rounded border border-gray-700 px-5 py-2 text-sm text-gray-200 hover:border-gray-600">Browse Services</Link>
+            <Link href={"/services" as Route} className="rounded border border-gray-700 px-5 py-2 text-sm text-gray-200 hover:border-gray-600">Browse Services</Link>
             <Link href="/admin" className="rounded border border-gray-700 px-5 py-2 text-sm text-gray-200 hover:border-gray-600">Admin</Link>
           </div>
         </div>
@@ -76,7 +77,7 @@ export default function HomePage() {
           <div>© {new Date().getFullYear()} RobotaxiMap</div>
           <div className="flex items-center gap-4">
             <Link href="/map" className="hover:text-gray-200">Map</Link>
-            <Link href="/services" className="hover:text-gray-200">Services</Link>
+            <Link href={"/services" as Route} className="hover:text-gray-200">Services</Link>
             <Link href="/admin" className="hover:text-gray-200">Admin</Link>
           </div>
         </div>

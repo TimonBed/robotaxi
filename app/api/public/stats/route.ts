@@ -8,18 +8,18 @@ export const dynamic = 'force-dynamic'
 export async function GET() {
   // Load geofences
   const geos = await prisma.geofence.findMany({ where: { isActive: true }, select: { geometry: true } })
-  const features: GeoJSON.Feature[] = geos
+  const features = geos
     .map((g) => {
       const geometry = typeof g.geometry === 'string' ? JSON.parse(g.geometry as unknown as string) : (g.geometry as any)
-      return { type: 'Feature', properties: {}, geometry }
+      const feature = { type: 'Feature' as const, properties: {}, geometry } as GeoJSON.Feature
+      return feature
     })
     .filter((f) => f && f.geometry && (f.geometry.type === 'Polygon' || f.geometry.type === 'MultiPolygon'))
 
   function toMulti(f: GeoJSON.Feature): GeoJSON.Feature<GeoJSON.MultiPolygon> {
-    if (f.geometry.type === 'MultiPolygon') return f as any
-    // Polygon → MultiPolygon
-    // @ts-expect-error safe cast
-    return turf.multiPolygon([(f.geometry as any).coordinates]) as any
+    if (f.geometry.type === 'MultiPolygon') return f as GeoJSON.Feature<GeoJSON.MultiPolygon>
+    const polygon = f.geometry as GeoJSON.Polygon
+    return turf.multiPolygon([polygon.coordinates]) as GeoJSON.Feature<GeoJSON.MultiPolygon>
   }
 
   function unionBatch(fs: GeoJSON.Feature[]): GeoJSON.Feature[] {
