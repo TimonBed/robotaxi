@@ -36,7 +36,8 @@ export default function GeofenceEditor({ value, onChange, overlay }: Props) {
             layers: [{ id: 'osm', type: 'raster', source: 'osm' }]
           },
       center: [0, 20],
-      zoom: 2
+      zoom: 2,
+      attributionControl: { compact: true }
     })
     mapRef.current = map
 
@@ -47,9 +48,12 @@ export default function GeofenceEditor({ value, onChange, overlay }: Props) {
     ;(map as any).addControl(draw)
     drawRef.current = draw
 
-    map.on('draw.create', update)
-    map.on('draw.update', update)
-    map.on('draw.delete', update)
+    const onCreate = () => update()
+    const onUpdate = () => update()
+    const onDelete = () => update()
+    map.on('draw.create', onCreate)
+    map.on('draw.update', onUpdate)
+    map.on('draw.delete', onDelete)
 
     function update() {
       if (!drawRef.current) return
@@ -77,7 +81,10 @@ export default function GeofenceEditor({ value, onChange, overlay }: Props) {
     })
 
     return () => {
-      map.remove()
+      try { map.off('draw.create', onCreate) } catch {}
+      try { map.off('draw.update', onUpdate) } catch {}
+      try { map.off('draw.delete', onDelete) } catch {}
+      try { map.remove() } catch {}
       mapRef.current = null
       drawRef.current = null
     }
@@ -86,13 +93,13 @@ export default function GeofenceEditor({ value, onChange, overlay }: Props) {
   // Temporary raster image overlay for tracing
   useEffect(() => {
     const map = mapRef.current as any
-    if (!map) return
+    if (!map || !(map as any)?.style) return
     const sourceId = 'temp-overlay-image'
     const layerId = 'temp-overlay-layer'
 
     function removeOverlay() {
-      if (map.getLayer && map.getLayer(layerId)) map.removeLayer(layerId)
-      if (map.getSource && map.getSource(sourceId)) map.removeSource(sourceId)
+      try { if (map.getLayer && map.getLayer(layerId)) map.removeLayer(layerId) } catch {}
+      try { if (map.getSource && map.getSource(sourceId)) map.removeSource(sourceId) } catch {}
     }
 
     if (!overlay?.url) {
