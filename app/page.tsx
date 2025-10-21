@@ -6,13 +6,28 @@ import { GlobeAltIcon, MapIcon, ShieldCheckIcon } from '@heroicons/react/24/outl
 export default function HomePage() {
   return (
     <main className="grid gap-10">
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: 'RobotaxiMap',
+            url: process.env.NEXT_PUBLIC_SITE_URL || 'https://robotaximap.example',
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://robotaximap.example'}/map?query={search_term_string}`,
+              'query-input': 'required name=search_term_string'
+            }
+          })
+        }}
+      />
       {/* Hero */}
       <section className="relative overflow-hidden rounded-xl border border-gray-800 bg-gradient-to-b from-gray-900 to-gray-950 p-8 md:p-12">
         <div className="relative z-10 max-w-3xl">
-          <h1 className="mb-3 text-3xl font-semibold tracking-tight md:text-4xl">RobotaxiMap — the live map of autonomous ride coverage</h1>
-          <p className="text-sm leading-6 text-gray-300 md:text-base">
-            Track where robotaxi services operate today. Explore colored geofences, compare operators, and see rollout momentum — all in one place.
-          </p>
+          <h1 className="mb-3 text-3xl font-semibold tracking-tight md:text-4xl">Robotaxi coverage map: autonomous ride zones by operator</h1>
+          <p className="text-sm leading-6 text-gray-300 md:text-base">Track where robotaxi services operate today. Explore geofences by operator and rollout status, and compare global coverage at a glance.</p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/map" className="rounded bg-sky-500 px-5 py-2 text-sm font-medium text-white hover:bg-sky-400">Open Coverage Map</Link>
             <Link href={"/services" as Route} className="rounded border border-gray-700 px-5 py-2 text-sm text-gray-200 hover:border-gray-600">Browse Services</Link>
