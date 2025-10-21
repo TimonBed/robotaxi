@@ -20,6 +20,38 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Local Postgres via Docker
+
+We provide Docker Compose for live development (app + Postgres + Prisma Studio).
+
+1) Start DB and set `DATABASE_URL` in `.env.local`:
+
+```bash
+docker compose up -d
+```
+
+`.env.local`:
+
+```env
+DATABASE_URL=postgresql://robotaxi:robotaxi@localhost:5432/robotaximap
+```
+
+2) Apply schema and seed (optional if web service already pushed migrations):
+
+```bash
+npm run prisma:migrate
+npm run prisma:seed
+```
+
+Utilities:
+
+```bash
+docker compose logs -f web
+docker compose logs -f db
+docker compose down
+docker compose down -v  # drop db volume
+```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
