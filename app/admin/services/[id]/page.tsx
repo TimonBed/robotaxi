@@ -7,12 +7,13 @@ import { notFound } from 'next/navigation'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-export default async function EditServicePage({ params }: { params: { id: string } }) {
+export default async function EditServicePage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions as any)
   const role = (session as any)?.user?.role
   if (!session || role !== 'admin') return <main>Unauthorized</main>
 
-  const service = await prisma.service.findUnique({ where: { id: params.id } })
+  const { id } = await params
+  const service = await prisma.service.findUnique({ where: { id } })
   if (!service) return notFound()
 
   return (

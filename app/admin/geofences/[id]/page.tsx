@@ -7,12 +7,13 @@ import { notFound } from 'next/navigation'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-export default async function EditGeofencePage({ params }: { params: { id: string } }) {
+export default async function EditGeofencePage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions as any)
   const role = (session as any)?.user?.role
   if (!session || role !== 'admin') return <main>Unauthorized</main>
 
-  const geofence = await prisma.geofence.findUnique({ where: { id: params.id }, include: { service: true } })
+  const { id } = await params
+  const geofence = await prisma.geofence.findUnique({ where: { id }, include: { service: true } })
   if (!geofence) return notFound()
 
   const initialGeom = typeof geofence.geometry === 'string' ? JSON.parse(geofence.geometry as unknown as string) : (geofence.geometry as any)
