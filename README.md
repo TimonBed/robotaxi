@@ -14,42 +14,94 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3001](http://localhost:3001) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Local Postgres via Docker
+## Local Development Setup
 
-We provide Docker Compose for live development (app + Postgres + Prisma Studio).
+This project uses Docker for the database and Prisma Studio, while Next.js runs locally for better development experience.
 
-1) Start DB and set `DATABASE_URL` in `.env.local`:
+### Quick Start
 
+1) **Start development environment:**
 ```bash
-docker compose up -d
+npm run dev
 ```
 
-`.env.local`:
+This will:
+- Start PostgreSQL database in Docker (port 5432)
+- Start Prisma Studio in Docker (http://localhost:5555)
+- Start Next.js locally on port 3001
 
-```env
-DATABASE_URL=postgresql://robotaxi:robotaxi@localhost:5432/robotaximap
-```
-
-2) Apply schema and seed (optional if web service already pushed migrations):
-
+2) **First time setup - Apply database schema:**
 ```bash
 npm run prisma:migrate
 npm run prisma:seed
 ```
 
-Utilities:
+### Environment Configuration
+
+Environment variables are configured in `.env.local`:
+```env
+# Database
+DATABASE_URL=postgresql://robotaxi:robotaxi@localhost:5432/robotaximap
+DIRECT_URL=postgresql://robotaxi:robotaxi@localhost:5432/robotaximap
+
+# NextAuth
+NEXTAUTH_URL=http://localhost:3001
+NEXTAUTH_SECRET=your-secret-key-here
+
+# Public config
+NEXT_PUBLIC_SITE_URL=http://localhost:3001
+```
+
+### Troubleshooting
+
+**Port 3001 already in use:**
+```bash
+# Stop any existing Next.js processes
+taskkill /f /im node.exe
+
+# Or use a different port
+npm run dev -- -p 3002
+```
+
+**Docker orphan containers warning:**
+```bash
+# Clean up orphaned containers
+docker compose up -d --remove-orphans
+```
+
+**Database connection issues:**
+```bash
+# Check if database is running
+docker ps
+
+# View database logs
+docker compose logs -f db
+
+# Reset database
+docker compose down -v
+docker compose up -d
+npm run prisma:migrate
+npm run prisma:seed
+```
+
+### Utilities
 
 ```bash
-docker compose logs -f web
+# View logs
 docker compose logs -f db
+docker compose logs -f studio
+
+# Stop services
 docker compose down
-docker compose down -v  # drop db volume
+
+# Reset everything (including data)
+docker compose down -v
 ```
 
 ## Learn More

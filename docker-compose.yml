@@ -16,34 +16,13 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-  web:
-    image: node:20-alpine
-    container_name: robotaximap_web
-    working_dir: /app
-    command: sh -lc "npm ci && (npx prisma migrate deploy || npx prisma db push) && npx prisma db seed && npm run dev"
-    environment:
-      NODE_ENV: development
-      CHOKIDAR_USEPOLLING: "true"
-      WATCHPACK_POLLING: "true"
-      DATABASE_URL: postgresql://robotaxi:robotaxi@db:5432/robotaximap
-      DIRECT_URL: postgresql://robotaxi:robotaxi@db:5432/robotaximap
-      # Optional: provide seed admin credentials
-      # ADMIN_EMAIL: admin@example.com
-      # ADMIN_PASSWORD: changeme123!
-    volumes:
-      - ./:/app
-      - /app/node_modules
-    ports:
-      - "3001:3001"
-    depends_on:
-      db:
-        condition: service_healthy
   studio:
-    image: node:20-alpine
+    image: node:22-alpine
     container_name: robotaximap_studio
     working_dir: /app
-    command: sh -lc "npm ci && npx prisma studio -p 5555 -b none"
+    command: sh -lc "npm ci --legacy-peer-deps && npx prisma studio -p 5555 -b none"
     environment:
+      NPM_CONFIG_LEGACY_PEER_DEPS: "true"
       DATABASE_URL: postgresql://robotaxi:robotaxi@db:5432/robotaximap
       DIRECT_URL: postgresql://robotaxi:robotaxi@db:5432/robotaximap
     volumes:
